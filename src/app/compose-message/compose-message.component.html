@@ -1,239 +1,223 @@
-<div class="compose-page container-fluid py-3 py-md-4">
-  <!-- Breadcrumb (on page background) -->
-  <nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb mb-0 breadcrumb-compose">
-      <li class="breadcrumb-item"><a href="#">Send Marketing Message</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Compose Message</li>
-    </ol>
-  </nav>
-
-  <!-- Single white card: back + title + subtitle + template details -->
-  <div class="card card-compose card-intro mb-4 compose-animate compose-delay-0">
-    <div class="card-body pt-4 pb-4">
-      <div class="d-flex align-items-start gap-3 mb-4">
-        <button type="button" class="btn btn-back-compose" aria-label="Back">
-          <i class="bi bi-arrow-left"></i>
-        </button>
-        <div class="flex-grow-1">
-          <h1 class="compose-main-title mb-1">Customize Your Message</h1>
-          <p class="compose-subtitle mb-0">Fill in the required details based on your selected template to complete the message setup.</p>
-        </div>
-      </div>
-      <div class="row g-3 template-fields">
-        <div class="col-12 col-sm-6 col-md-3">
-          <label class="form-label form-label-muted mb-0">Template Name</label>
-          <p class="mb-0 fw-medium text-dark">Diwali Sale</p>
-        </div>
-        <div class="col-12 col-sm-6 col-md-3">
-          <label class="form-label form-label-muted mb-0">Template ID</label>
-          <p class="mb-0 fw-medium text-dark">5798525851493</p>
-        </div>
-        <div class="col-12 col-sm-6 col-md-3">
-          <label class="form-label form-label-muted mb-0">Message Type</label>
-          <p class="mb-0 fw-medium text-dark">Text and Rich Media</p>
-        </div>
-        <div class="col-12 col-sm-6 col-md-3">
-          <label class="form-label form-label-muted mb-0">Language</label>
-          <p class="mb-0 fw-medium text-dark">English</p>
-        </div>
-      </div>
+<ng-template #attributeDropdownTpl>
+  <div class="attr-dropdown">
+    <div class="attr-dropdown-search">
+      <span class="attr-dropdown-search-icon" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </span>
+      <input type="text" [(ngModel)]="attributeSearch" placeholder="Search Standard Attributes" />
+    </div>
+    <div class="attr-dropdown-tabs">
+      <button type="button" class="attr-tab" [class.active]="activeAttributeTab === 'standard'" (click)="activeAttributeTab = 'standard'">Standard</button>
+      <button type="button" class="attr-tab" [class.active]="activeAttributeTab === 'custom'" (click)="activeAttributeTab = 'custom'">Custom</button>
+    </div>
+    <div class="attr-dropdown-list">
+      <button type="button" class="attr-dropdown-item" *ngFor="let attr of (activeAttributeTab === 'standard' ? filteredStandardAttributes : filteredCustomAttributes)" (click)="selectAttribute(attr)">
+        <span class="attr-item-bracket">&#123;&#125;</span>
+        {{ attr }}
+      </button>
+      <p class="attr-dropdown-empty" *ngIf="(activeAttributeTab === 'standard' ? filteredStandardAttributes : filteredCustomAttributes).length === 0">No attributes found</p>
     </div>
   </div>
+</ng-template>
 
-  <form [formGroup]="form" (ngSubmit)="doneComposing()">
-    <!-- Header section -->
-    <div class="card card-compose mb-4 compose-animate compose-delay-1">
-      <div class="card-header card-header-compose">
-        <h2 class="h6 mb-0 fw-semibold">Header</h2>
-      </div>
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label mb-0">Image URL</label>
-              <span class="char-count">{{ getCharCount(form.get('imageUrl')?.value, 2048) }}</span>
-            </div>
-            <div class="input-with-variable">
-              <input type="url" class="form-control form-control-compose" formControlName="imageUrl" placeholder="https://" />
-              <button type="button" class="btn btn-variable-brace" title="Insert variable"><span class="brace-icon">{{ braceIcon }}</span></button>
-            </div>
-            <div class="form-text form-text-muted">
-              <i class="bi bi-info-circle me-1"></i>
-              Link to supported file format: .jpg, .jpeg, .png up to 5MB. Image may be cropped on certain devices. Recommended resolution: 1125 x 600 px.
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label mb-0">Video URL</label>
-              <span class="char-count">{{ getCharCount(form.get('videoUrl')?.value, 2048) }}</span>
-            </div>
-            <div class="input-with-variable">
-              <input type="url" class="form-control form-control-compose" formControlName="videoUrl" placeholder="https://" />
-              <button type="button" class="btn btn-variable-brace" title="Insert variable"><span class="brace-icon">{{ braceIcon }}</span></button>
-            </div>
-            <div class="form-text form-text-muted">
-              <i class="bi bi-info-circle me-1"></i>
-              Link to supported file format: MP4 up to 16 MB. Video may be cropped on certain devices. Recommended resolution: 1125 x 600 px.
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label mb-0">Document URL</label>
-              <span class="char-count">{{ getCharCount(form.get('documentUrl')?.value, 2048) }}</span>
-            </div>
-            <div class="input-with-variable">
-              <input type="url" class="form-control form-control-compose" formControlName="documentUrl" placeholder="https://" />
-              <button type="button" class="btn btn-variable-brace" title="Insert variable"><span class="brace-icon">{{ braceIcon }}</span></button>
-            </div>
-            <div class="form-text form-text-muted">
-              <i class="bi bi-info-circle me-1"></i>
-              Link to supported file format: PDF up to 100MB.
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="form-label">Location Latitude</label>
-            <input type="number" class="form-control form-control-compose" formControlName="locationLatitude" placeholder="0" min="-90" max="90" step="any" />
-            <div class="form-text form-text-muted">
-              <i class="bi bi-info-circle me-1"></i>
-              Latitude can be any number between -90 and 90
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="form-label">Location Longitude</label>
-            <input type="number" class="form-control form-control-compose" formControlName="locationLongitude" placeholder="0" min="-180" max="180" step="any" />
-            <div class="form-text form-text-muted">
-              <i class="bi bi-info-circle me-1"></i>
-              Longitude can be any number between -180 and 180
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="page">
+  <header class="page-header header-strip">
+    <div class="breadcrumbs">
+      <span class="breadcrumb-text">Send Marketing Message</span>
+      <span class="breadcrumb-sep">&gt;</span>
+      <span class="breadcrumb-current">Compose Message</span>
     </div>
-
-    <!-- Message section -->
-    <div class="card card-compose mb-4 compose-animate compose-delay-2">
-      <div class="card-header card-header-compose">
-        <h2 class="h6 mb-0 fw-semibold">Message</h2>
-      </div>
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-12 position-relative">
-            <label class="form-label">Variable &#123;&#123;1&#125;&#125;</label>
-            <div class="variable-input-row">
-              <input type="text" class="form-control form-control-compose variable-input" formControlName="variable1" placeholder="Enter variable content" (focus)="openAttributeDropdown(1)" />
-              <i class="bi bi-globe2 variable-inline-icon" title="Info"></i>
-              <i class="bi bi-braces variable-inline-icon" title="Variable"></i>
-              <button type="button" class="btn btn-attribute-purple" (click)="openAttributeDropdown(1); $event.stopPropagation()" aria-label="Select attribute">
-                <i class="bi bi-braces"></i>
-              </button>
-            </div>
-            @if (showAttributeDropdown() === 1) {
-              <div class="attribute-dropdown attribute-dropdown-animate position-absolute start-0 mt-1 z-3" (click)="$event.stopPropagation()">
-                <div class="card-body p-2">
-                  <div class="dropdown-search-wrap mb-2">
-                    <i class="bi bi-search attribute-search-icon"></i>
-                    <input type="text" class="form-control form-control-sm attribute-search-input" placeholder="Q Search Standard Attributes" [formControl]="attributeSearch" (click)="$event.stopPropagation()" />
-                  </div>
-                  <ul class="nav attribute-tabs mb-2">
-                    <li class="nav-item"><a class="nav-link active" href="#">Standard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Custom</a></li>
-                  </ul>
-                  <ul class="list-group list-group-flush attribute-list">
-                    @for (attr of filteredStandard(); track attr) {
-                      <li class="list-group-item attribute-list-item py-2" (click)="selectAttribute(1, attr)"><i class="bi bi-braces me-2 attribute-item-icon"></i>{{ attr }}</li>
-                    }
-                  </ul>
-                </div>
-              </div>
-            }
-          </div>
-          <div class="col-12 position-relative">
-            <label class="form-label">Variable &#123;&#123;2&#125;&#125;</label>
-            <div class="variable-input-row">
-              <input type="text" class="form-control form-control-compose variable-input" formControlName="variable2" placeholder="Enter variable content" (focus)="openAttributeDropdown(2)" />
-              <i class="bi bi-globe2 variable-inline-icon" title="Info"></i>
-              <i class="bi bi-braces variable-inline-icon" title="Variable"></i>
-              <button type="button" class="btn btn-attribute-purple" (click)="openAttributeDropdown(2); $event.stopPropagation()" aria-label="Select attribute">
-                <i class="bi bi-braces"></i>
-              </button>
-            </div>
-            @if (showAttributeDropdown() === 2) {
-              <div class="attribute-dropdown attribute-dropdown-animate position-absolute start-0 mt-1 z-3" (click)="$event.stopPropagation()">
-                <div class="card-body p-2">
-                  <div class="dropdown-search-wrap mb-2">
-                    <i class="bi bi-search attribute-search-icon"></i>
-                    <input type="text" class="form-control form-control-sm attribute-search-input" placeholder="Q Search Standard Attributes" [formControl]="attributeSearch" (click)="$event.stopPropagation()" />
-                  </div>
-                  <ul class="nav attribute-tabs mb-2">
-                    <li class="nav-item"><a class="nav-link active" href="#">Standard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Custom</a></li>
-                  </ul>
-                  <ul class="list-group list-group-flush attribute-list">
-                    @for (attr of filteredStandard(); track attr) {
-                      <li class="list-group-item attribute-list-item py-2" (click)="selectAttribute(2, attr)"><i class="bi bi-braces me-2 attribute-item-icon"></i>{{ attr }}</li>
-                    }
-                  </ul>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Buttons section -->
-    <div class="card card-compose mb-4 compose-animate compose-delay-3">
-      <div class="card-header card-header-compose">
-        <h2 class="h6 mb-0 fw-semibold">Buttons</h2>
-      </div>
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-12 col-md-6">
-            <label class="form-label"><span>"Yes" button payload</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
-            <div class="input-with-brace">
-              <input type="text" class="form-control form-control-compose" formControlName="yesButtonPayload" placeholder="Enter the payload" />
-              <i class="bi bi-braces input-brace-icon"></i>
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label mb-0"><span>"No" button payload</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
-              <span class="char-count">{{ getCharCount(form.get('noButtonPayload')?.value, 128) }}</span>
-            </div>
-            <div class="input-with-brace">
-              <input type="text" class="form-control form-control-compose" formControlName="noButtonPayload" placeholder="Enter the payload" />
-              <i class="bi bi-braces input-brace-icon"></i>
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label mb-0"><span>"Unsubscribe!" button payload</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
-              <span class="char-count">{{ getCharCount(form.get('unsubscribeButtonPayload')?.value, 128) }}</span>
-            </div>
-            <div class="input-with-brace">
-              <input type="text" class="form-control form-control-compose" formControlName="unsubscribeButtonPayload" placeholder="Enter the payload" />
-              <i class="bi bi-braces input-brace-icon"></i>
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="form-label"><span>"Visit website" URL parameter</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
-            <div class="input-with-brace">
-              <input type="text" class="form-control form-control-compose" formControlName="visitWebsiteParam" placeholder="Enter the payload" />
-              <i class="bi bi-braces input-brace-icon"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Action bar -->
-    <div class="action-bar compose-animate compose-delay-4">
-      <button type="button" class="btn btn-cancel-compose" (click)="cancel()">
-        <i class="bi bi-x-lg me-1"></i>Cancel
+    <div class="header-divider"></div>
+    <div class="header-title-row">
+      <button type="button" class="back-btn" aria-label="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
       </button>
-      <button type="submit" class="btn btn-done-compose">
-        <i class="bi bi-check-lg me-1"></i>Done composing
-      </button>
+      <div class="header-title-block">
+        <h1 class="page-title">Customize Your Message</h1>
+        <p class="page-subtitle">Fill in the required details based on your selected template to complete the message setup.</p>
+      </div>
     </div>
-  </form>
+    <div class="header-divider-below-subtitle"></div>
+    <div class="header-template-details">
+      <div class="detail-item">
+        <span class="detail-label">Template Name</span>
+        <span class="detail-value">Diwali Sale</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Template ID</span>
+        <span class="detail-value">5798525851493</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Message Type</span>
+        <span class="detail-value">Text and Rich Media</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Language</span>
+        <span class="detail-value">English</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="content-scroll" [class.dropdown-open]="!!openDropdownFor">
+      <section class="section-card" [class.dropdown-open]="openDropdownFor === 'img' || openDropdownFor === 'video' || openDropdownFor === 'doc'">
+        <h2 class="section-title">Header</h2>
+        <div class="form-grid form-grid-vertical">
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'img'">
+            <div class="field-label-row">
+              <label>Image URL</label>
+              <span class="char-count">0/2048</span>
+            </div>
+            <div class="input-with-bracket">
+              <input type="url" placeholder="https://" [(ngModel)]="imageUrl" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('img')" [class.active]="openDropdownFor === 'img'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'img'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+            <small class="hint">Link to supported file format: .jpg, .jpeg, .png up to 5MB. Image may be cropped on certain devices. Recommended resolution: 1025 x 500 px.</small>
+          </div>
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'video'">
+            <div class="field-label-row">
+              <label>Video URL</label>
+              <span class="char-count">0/2048</span>
+            </div>
+            <div class="input-with-bracket">
+              <input type="url" placeholder="https://" [(ngModel)]="videoUrl" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('video')" [class.active]="openDropdownFor === 'video'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'video'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+            <small class="hint">Link to supported file format: .MP4 up to 16 MB. Video may be cropped on certain devices. Recommended resolution: 1025 x 500 px.</small>
+          </div>
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'doc'">
+            <div class="field-label-row">
+              <label>Document URL</label>
+              <span class="char-count">0/2048</span>
+            </div>
+            <div class="input-with-bracket">
+              <input type="url" placeholder="https://" [(ngModel)]="documentUrl" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('doc')" [class.active]="openDropdownFor === 'doc'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'doc'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+            <small class="hint">Link to supported file format: PDF up to 100MB.</small>
+          </div>
+        </div>
+        <div class="form-grid form-grid-2 location-row">
+          <div class="field">
+            <label>Location Latitude</label>
+            <input type="number" placeholder="0" />
+            <small class="hint">Latitude can be any number between -90 and 90</small>
+          </div>
+          <div class="field">
+            <label>Location Longitude</label>
+            <input type="number" placeholder="0" />
+            <small class="hint">Longitude can be any number between -180 and 180</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card" [class.dropdown-open]="openDropdownFor === 'var1' || openDropdownFor === 'var2'">
+        <h2 class="section-title">Message</h2>
+        <div class="form-grid form-grid-vertical">
+          <div class="field variable-field variable-field-dropdown-root" [class.dropdown-open]="openDropdownFor === 'var1'">
+            <label>Variable &#123;&#123;1&#125;&#125;</label>
+            <div class="input-with-bracket variable-input-row">
+              <input type="text" [(ngModel)]="selectedVariable1" placeholder="Enter variable content" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('var1')" [class.active]="openDropdownFor === 'var1'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'var1'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="field variable-field variable-field-dropdown-root" [class.dropdown-open]="openDropdownFor === 'var2'">
+            <label>Variable &#123;&#123;2&#125;&#125;</label>
+            <div class="input-with-bracket variable-input-row">
+              <input type="text" [(ngModel)]="selectedVariable2" placeholder="Enter variable content" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('var2')" [class.active]="openDropdownFor === 'var2'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'var2'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card" [class.dropdown-open]="openDropdownFor === 'yes' || openDropdownFor === 'no' || openDropdownFor === 'unsub' || openDropdownFor === 'visit'">
+        <h2 class="section-title">Buttons</h2>
+        <div class="form-grid form-grid-vertical">
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'yes'">
+            <label>"Yes" button payload <span class="label-info-icon" title="Info">i</span></label>
+            <div class="input-with-bracket">
+              <input type="text" placeholder="Enter the payload" [(ngModel)]="yesPayload" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('yes')" [class.active]="openDropdownFor === 'yes'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'yes'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'no'">
+            <div class="field-label-row">
+              <label>"No" button payload <span class="label-info-icon" title="Info">i</span></label>
+              <span class="char-count">0/128</span>
+            </div>
+            <div class="input-with-bracket">
+              <input type="text" placeholder="Enter the payload" [(ngModel)]="noPayload" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('no')" [class.active]="openDropdownFor === 'no'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown" *ngIf="openDropdownFor === 'no'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'unsub'">
+            <div class="field-label-row">
+              <label>"Unsubscribe!" button payload <span class="label-info-icon" title="Info">i</span></label>
+              <span class="char-count">0/128</span>
+            </div>
+            <div class="input-with-bracket">
+              <input type="text" placeholder="Enter the payload" [(ngModel)]="unsubPayload" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('unsub')" [class.active]="openDropdownFor === 'unsub'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown attribute-dropdown-up" *ngIf="openDropdownFor === 'unsub'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="field field-with-dropdown" [class.dropdown-open]="openDropdownFor === 'visit'">
+            <label>"Visit website" URL parameter <span class="label-info-icon" title="Info">i</span></label>
+            <div class="input-with-bracket">
+              <input type="text" placeholder="Enter the payload" [(ngModel)]="visitPayload" />
+              <button type="button" class="bracket-btn" (click)="toggleDropdownField('visit')" [class.active]="openDropdownFor === 'visit'" aria-label="Select attribute"><span class="bracket-icon">&#123;&#125;</span></button>
+              <div class="attribute-dropdown attribute-dropdown-up" *ngIf="openDropdownFor === 'visit'">
+                <ng-container *ngTemplateOutlet="attributeDropdownTpl"></ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-spacer"></div>
+    </div>
+
+    <footer class="page-footer page-footer-fixed">
+      <div class="page-footer-inner">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onDoneComposing()">
+          <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          Done composing
+        </button>
+      </div>
+    </footer>
+  </main>
 </div>

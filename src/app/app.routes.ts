@@ -1,13 +1,5 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [
-  { path: '', redirectTo: 'compose', pathMatch: 'full' },
-  {
-    path: 'compose',
-    loadComponent: () =>
-      import('./compose-message/compose-message.component').then(
-        (m) => m.ComposeMessageComponent
-      ),
-  },
-  { path: '**', redirectTo: 'compose' },
+export const APP_ROUTES: Routes = [
+  { path: '', loadChildren: () => import('./compose-message/compose-message.module').then(m => m.ComposeMessageModule) }
 ];
