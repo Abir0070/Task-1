@@ -1,0 +1,87 @@
+/* Global styles – match design color palette */
+:root {
+  --compose-page-bg: #F9FAFD;
+  --compose-card-bg: #FFFFFF;
+  --compose-primary: #6F42C1;
+  --compose-banner-bg: #EDF2FE;
+  --compose-text-dark: #212529;
+  --compose-text-muted: #6C757D;
+  --compose-border: #DEE2E6;
+  --compose-dropdown-hover: #EBE0F7;
+}
+
+body {
+  background-color: var(--compose-page-bg);
+  color: var(--compose-text-dark);
+}
+
+/* Breadcrumb */
+.breadcrumb-compose .breadcrumb-item a {
+  color: var(--compose-text-dark);
+}
+.breadcrumb-compose .breadcrumb-item.active {
+  color: var(--compose-text-muted);
+}
+.breadcrumb-compose .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--compose-text-muted);
+}
+
+/* Form labels and text */
+.form-label,
+.card-header-compose .h6 {
+  color: var(--compose-text-dark);
+}
+.form-label-muted {
+  color: var(--compose-text-muted);
+}
+.form-text-muted,
+.form-text.form-text-muted {
+  color: var(--compose-text-muted);
+}
+.form-info-icon {
+  color: var(--compose-text-muted);
+}
+.input-group-text.text-muted {
+  color: var(--compose-text-muted);
+  background-color: var(--compose-card-bg);
+  border-color: var(--compose-border);
+}
+
+/* Inputs */
+.form-control-compose,
+.form-control-compose:focus {
+  border-color: var(--compose-border);
+  background-color: var(--compose-card-bg);
+}
+.form-control-compose::placeholder {
+  color: var(--compose-text-muted);
+}
+.form-control-compose:focus {
+  border-color: var(--compose-primary);
+  box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.15);
+}
+
+/* Action buttons – exact design */
+.btn-cancel-compose {
+  border: 1px solid var(--compose-primary);
+  background-color: transparent;
+  color: var(--compose-primary);
+  border-radius: 4px;
+}
+.btn-cancel-compose:hover {
+  background-color: var(--compose-dropdown-hover);
+  border-color: var(--compose-primary);
+  color: var(--compose-primary);
+}
+
+.btn-done-compose {
+  background-color: var(--compose-primary);
+  border-color: var(--compose-primary);
+  color: #FFFFFF;
+  border-radius: 4px;
+}
+.btn-done-compose:hover {
+  background-color: #5a32a3;
+  border-color: #5a32a3;
+  color: #FFFFFF;
+}

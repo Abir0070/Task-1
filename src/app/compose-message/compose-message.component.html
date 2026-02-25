@@ -1,0 +1,239 @@
+<div class="compose-page container-fluid py-3 py-md-4">
+  <!-- Breadcrumb (on page background) -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb mb-0 breadcrumb-compose">
+      <li class="breadcrumb-item"><a href="#">Send Marketing Message</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Compose Message</li>
+    </ol>
+  </nav>
+
+  <!-- Single white card: back + title + subtitle + template details -->
+  <div class="card card-compose card-intro mb-4 compose-animate compose-delay-0">
+    <div class="card-body pt-4 pb-4">
+      <div class="d-flex align-items-start gap-3 mb-4">
+        <button type="button" class="btn btn-back-compose" aria-label="Back">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <div class="flex-grow-1">
+          <h1 class="compose-main-title mb-1">Customize Your Message</h1>
+          <p class="compose-subtitle mb-0">Fill in the required details based on your selected template to complete the message setup.</p>
+        </div>
+      </div>
+      <div class="row g-3 template-fields">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label form-label-muted mb-0">Template Name</label>
+          <p class="mb-0 fw-medium text-dark">Diwali Sale</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label form-label-muted mb-0">Template ID</label>
+          <p class="mb-0 fw-medium text-dark">5798525851493</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label form-label-muted mb-0">Message Type</label>
+          <p class="mb-0 fw-medium text-dark">Text and Rich Media</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label form-label-muted mb-0">Language</label>
+          <p class="mb-0 fw-medium text-dark">English</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="doneComposing()">
+    <!-- Header section -->
+    <div class="card card-compose mb-4 compose-animate compose-delay-1">
+      <div class="card-header card-header-compose">
+        <h2 class="h6 mb-0 fw-semibold">Header</h2>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label mb-0">Image URL</label>
+              <span class="char-count">{{ getCharCount(form.get('imageUrl')?.value, 2048) }}</span>
+            </div>
+            <div class="input-with-variable">
+              <input type="url" class="form-control form-control-compose" formControlName="imageUrl" placeholder="https://" />
+              <button type="button" class="btn btn-variable-brace" title="Insert variable"><span class="brace-icon">{{ braceIcon }}</span></button>
+            </div>
+            <div class="form-text form-text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Link to supported file format: .jpg, .jpeg, .png up to 5MB. Image may be cropped on certain devices. Recommended resolution: 1125 x 600 px.
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label mb-0">Video URL</label>
+              <span class="char-count">{{ getCharCount(form.get('videoUrl')?.value, 2048) }}</span>
+            </div>
+            <div class="input-with-variable">
+              <input type="url" class="form-control form-control-compose" formControlName="videoUrl" placeholder="https://" />
+              <button type="button" class="btn btn-variable-brace" title="Insert variable"><span class="brace-icon">{{ braceIcon }}</span></button>
+            </div>
+            <div class="form-text form-text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Link to supported file format: MP4 up to 16 MB. Video may be cropped on certain devices. Recommended resolution: 1125 x 600 px.
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label mb-0">Document URL</label>
+              <span class="char-count">{{ getCharCount(form.get('documentUrl')?.value, 2048) }}</span>
+            </div>
+            <div class="input-with-variable">
+              <input type="url" class="form-control form-control-compose" formControlName="documentUrl" placeholder="https://" />
+              <button type="button" class="btn btn-variable-brace" title="Insert variable"><span class="brace-icon">{{ braceIcon }}</span></button>
+            </div>
+            <div class="form-text form-text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Link to supported file format: PDF up to 100MB.
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Location Latitude</label>
+            <input type="number" class="form-control form-control-compose" formControlName="locationLatitude" placeholder="0" min="-90" max="90" step="any" />
+            <div class="form-text form-text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Latitude can be any number between -90 and 90
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Location Longitude</label>
+            <input type="number" class="form-control form-control-compose" formControlName="locationLongitude" placeholder="0" min="-180" max="180" step="any" />
+            <div class="form-text form-text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Longitude can be any number between -180 and 180
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message section -->
+    <div class="card card-compose mb-4 compose-animate compose-delay-2">
+      <div class="card-header card-header-compose">
+        <h2 class="h6 mb-0 fw-semibold">Message</h2>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12 position-relative">
+            <label class="form-label">Variable &#123;&#123;1&#125;&#125;</label>
+            <div class="variable-input-row">
+              <input type="text" class="form-control form-control-compose variable-input" formControlName="variable1" placeholder="Enter variable content" (focus)="openAttributeDropdown(1)" />
+              <i class="bi bi-globe2 variable-inline-icon" title="Info"></i>
+              <i class="bi bi-braces variable-inline-icon" title="Variable"></i>
+              <button type="button" class="btn btn-attribute-purple" (click)="openAttributeDropdown(1); $event.stopPropagation()" aria-label="Select attribute">
+                <i class="bi bi-braces"></i>
+              </button>
+            </div>
+            @if (showAttributeDropdown() === 1) {
+              <div class="attribute-dropdown attribute-dropdown-animate position-absolute start-0 mt-1 z-3" (click)="$event.stopPropagation()">
+                <div class="card-body p-2">
+                  <div class="dropdown-search-wrap mb-2">
+                    <i class="bi bi-search attribute-search-icon"></i>
+                    <input type="text" class="form-control form-control-sm attribute-search-input" placeholder="Q Search Standard Attributes" [formControl]="attributeSearch" (click)="$event.stopPropagation()" />
+                  </div>
+                  <ul class="nav attribute-tabs mb-2">
+                    <li class="nav-item"><a class="nav-link active" href="#">Standard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Custom</a></li>
+                  </ul>
+                  <ul class="list-group list-group-flush attribute-list">
+                    @for (attr of filteredStandard(); track attr) {
+                      <li class="list-group-item attribute-list-item py-2" (click)="selectAttribute(1, attr)"><i class="bi bi-braces me-2 attribute-item-icon"></i>{{ attr }}</li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="col-12 position-relative">
+            <label class="form-label">Variable &#123;&#123;2&#125;&#125;</label>
+            <div class="variable-input-row">
+              <input type="text" class="form-control form-control-compose variable-input" formControlName="variable2" placeholder="Enter variable content" (focus)="openAttributeDropdown(2)" />
+              <i class="bi bi-globe2 variable-inline-icon" title="Info"></i>
+              <i class="bi bi-braces variable-inline-icon" title="Variable"></i>
+              <button type="button" class="btn btn-attribute-purple" (click)="openAttributeDropdown(2); $event.stopPropagation()" aria-label="Select attribute">
+                <i class="bi bi-braces"></i>
+              </button>
+            </div>
+            @if (showAttributeDropdown() === 2) {
+              <div class="attribute-dropdown attribute-dropdown-animate position-absolute start-0 mt-1 z-3" (click)="$event.stopPropagation()">
+                <div class="card-body p-2">
+                  <div class="dropdown-search-wrap mb-2">
+                    <i class="bi bi-search attribute-search-icon"></i>
+                    <input type="text" class="form-control form-control-sm attribute-search-input" placeholder="Q Search Standard Attributes" [formControl]="attributeSearch" (click)="$event.stopPropagation()" />
+                  </div>
+                  <ul class="nav attribute-tabs mb-2">
+                    <li class="nav-item"><a class="nav-link active" href="#">Standard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Custom</a></li>
+                  </ul>
+                  <ul class="list-group list-group-flush attribute-list">
+                    @for (attr of filteredStandard(); track attr) {
+                      <li class="list-group-item attribute-list-item py-2" (click)="selectAttribute(2, attr)"><i class="bi bi-braces me-2 attribute-item-icon"></i>{{ attr }}</li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons section -->
+    <div class="card card-compose mb-4 compose-animate compose-delay-3">
+      <div class="card-header card-header-compose">
+        <h2 class="h6 mb-0 fw-semibold">Buttons</h2>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label"><span>"Yes" button payload</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
+            <div class="input-with-brace">
+              <input type="text" class="form-control form-control-compose" formControlName="yesButtonPayload" placeholder="Enter the payload" />
+              <i class="bi bi-braces input-brace-icon"></i>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label mb-0"><span>"No" button payload</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
+              <span class="char-count">{{ getCharCount(form.get('noButtonPayload')?.value, 128) }}</span>
+            </div>
+            <div class="input-with-brace">
+              <input type="text" class="form-control form-control-compose" formControlName="noButtonPayload" placeholder="Enter the payload" />
+              <i class="bi bi-braces input-brace-icon"></i>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label mb-0"><span>"Unsubscribe!" button payload</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
+              <span class="char-count">{{ getCharCount(form.get('unsubscribeButtonPayload')?.value, 128) }}</span>
+            </div>
+            <div class="input-with-brace">
+              <input type="text" class="form-control form-control-compose" formControlName="unsubscribeButtonPayload" placeholder="Enter the payload" />
+              <i class="bi bi-braces input-brace-icon"></i>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label"><span>"Visit website" URL parameter</span> <i class="bi bi-info-circle form-info-icon ms-1"></i></label>
+            <div class="input-with-brace">
+              <input type="text" class="form-control form-control-compose" formControlName="visitWebsiteParam" placeholder="Enter the payload" />
+              <i class="bi bi-braces input-brace-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action bar -->
+    <div class="action-bar compose-animate compose-delay-4">
+      <button type="button" class="btn btn-cancel-compose" (click)="cancel()">
+        <i class="bi bi-x-lg me-1"></i>Cancel
+      </button>
+      <button type="submit" class="btn btn-done-compose">
+        <i class="bi bi-check-lg me-1"></i>Done composing
+      </button>
+    </div>
+  </form>
+</div>
